@@ -3,132 +3,393 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Book Haven</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Book Haven | Premium Bookstore</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2232/2232688.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* --- CSS STYLES --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #333; line-height: 1.6; }
+
+    /* Animations */
+    .hidden-el { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+    .show-el { opacity: 1; transform: translateY(0); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .container { width: 90%; max-width: 1100px; margin: 0 auto; padding: 2rem 0; }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; letter-spacing: 0.5px; }
+
+    /* Navbar */
+    .navbar {
+        background-color: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05); height: 70px;
+        display: flex; align-items: center; position: sticky; top: 0; z-index: 1000;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .navbar .container { display: flex; justify-content: space-between; align-items: center; padding: 0; height: 100%; }
+    .logo { font-size: 1.8rem; font-weight: 700; color: #1e293b; }
+    .nav-links { list-style: none; display: flex; gap: 2rem; }
+    .nav-links a { text-decoration: none; color: #333; font-weight: 500; transition: 0.3s; }
+    .nav-links a:hover { color: #ffc107; }
+    .hamburger { display: none; cursor: pointer; font-size: 1.5rem; color: #1e293b; }
+
+    /* Hero with Typewriter */
+    .hero {
+        background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)),
+                    url('https://images.unsplash.com/photo-1512820790803-83ca734da794') no-repeat center center/cover;
+        color: white; padding: 160px 0; text-align: center;
+    }
+    .typewriter h2 {
+        display: inline-block; overflow: hidden; border-right: .15em solid orange;
+        white-space: nowrap; margin: 0 auto 20px; letter-spacing: .10em;
+        animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        font-size: 3.5rem; font-weight: 700;
+    }
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: orange; } }
+    
+    .hero h2 span { color: #ffc107; }
+    .hero p { font-size: 1.4rem; margin: 0 auto 40px; opacity: 0.95; max-width: 600px; }
+    .btn {
+        padding: 1rem 2.5rem; background-color: #ffc107; color: #000; text-decoration: none;
+        border-radius: 50px; font-weight: 700; transition: 0.3s; display: inline-block;
+        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+    }
+    .btn:hover { background-color: #ffca2c; transform: translateY(-3px) scale(1.05); }
+
+    /* Search Bar */
+    .search-wrapper {
+        text-align: center; margin-bottom: 30px; position: relative; max-width: 500px; margin-left: auto; margin-right: auto;
+    }
+    .search-input {
+        width: 100%; padding: 15px 50px 15px 25px; font-size: 1.1rem; border: 2px solid #e2e8f0; border-radius: 50px; outline: none; transition: 0.3s;
+    }
+    .search-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+    .search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+    /* Filters */
+    .filter-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+    .filter-btn {
+        padding: 10px 25px; border: 2px solid #e2e8f0; background: white; border-radius: 30px;
+        cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; transition: 0.3s; color: #64748b;
+    }
+    .filter-btn:hover, .filter-btn.active {
+        background-color: #1e293b; color: white; border-color: #1e293b; transform: translateY(-2px);
+    }
+
+    /* Books */
+    .book-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-top: 2rem; }
+    .book-card {
+        background-color: #fff; border-radius: 16px; overflow: hidden;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); text-align: center;
+        transition: 0.4s; padding-bottom: 25px; position: relative; border: 1px solid #f1f5f9;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    .book-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+    .book-card img { width: 100%; height: 350px; object-fit: cover; }
+    .book-card h3 { font-size: 1.4rem; margin: 1.5rem 0 0.5rem; color: #1e293b; padding: 0 10px; }
+    .book-card p { font-size: 1rem; padding: 0 1.5rem 1.5rem; color: #64748b; }
+    .badge {
+        position: absolute; top: 15px; right: 15px; background-color: #e11d48; color: white;
+        padding: 6px 12px; font-size: 0.85rem; font-weight: 700; border-radius: 6px; z-index: 10;
+    }
+    .buy-btn {
+        display: inline-block; margin-top: 5px; padding: 12px 30px;
+        background-color: #10b981; color: white; text-decoration: none; border-radius: 50px;
+        font-weight: 600; font-size: 0.95rem; transition: 0.3s;
+    }
+    .buy-btn:hover { background-color: #059669; transform: translateY(-2px); box-shadow: 0 10px 15px rgba(16, 185, 129, 0.3); }
+
+    /* Categories */
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .category-card {
+        background: white; color: #334155; text-align: center; padding: 1.5rem;
+        border-radius: 12px; font-weight: 600; cursor: pointer; border: 1px solid #e2e8f0; transition: 0.3s;
+    }
+    .category-card:hover {
+        background: #3b82f6; color: white; transform: translateY(-5px); border-color: #3b82f6;
+    }
+
+    /* Testimonials */
+    .testimonials { background-color: #fff; padding: 4rem 0; margin-top: 4rem; }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+    .testimonial-card { background: #f8fafc; padding: 2rem; border-radius: 16px; border: 1px solid #e2e8f0; text-align: left; }
+    .testimonial-text { font-style: italic; color: #475569; margin-bottom: 1rem; font-size: 1.1rem; }
+    .testimonial-author { font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 40px; height: 40px; background-color: #cbd5e1; border-radius: 50%; }
+
+    /* Newsletter */
+    .newsletter { background-color: #1e293b; color: white; padding: 5rem 0; text-align: center; margin-top: 4rem; }
+    .newsletter h2 { color: #ffc107; margin-bottom: 0.5rem; }
+    .newsletter-form { max-width: 500px; margin: 30px auto 0; display: flex; gap: 10px; padding: 0 20px; }
+    .newsletter-form input { flex: 1; padding: 14px 25px; border-radius: 50px; border: none; outline: none; }
+    .newsletter-form button {
+        padding: 14px 30px; border-radius: 50px; border: none; background-color: #ffc107; font-weight: 700; cursor: pointer;
+    }
+
+    /* Contact */
+    .contact-form {
+        margin: 30px auto 0; display: flex; flex-direction: column; gap: 20px; max-width: 600px;
+        background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    .contact-form input, .contact-form textarea {
+        padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px;
+        background-color: #f8fafc; font-family: inherit; outline: none;
+    }
+    .contact-form button {
+        width: 100%; padding: 16px; background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        color: #000; font-weight: 700; font-size: 1.1rem; border: none; border-radius: 50px;
+        cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3); transition: 0.3s;
+    }
+    .contact-form button:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255, 152, 0, 0.5); }
+
+    /* Footer & Extras */
+    footer { background-color: #0f172a; color: #94a3b8; padding: 4rem 0 2rem; font-size: 0.95rem; text-align: center; }
+    .whatsapp-float {
+        position: fixed; bottom: 30px; right: 30px; z-index: 1000; background-color: #25d366; color: white;
+        padding: 12px 24px; border-radius: 50px; display: flex; align-items: center; gap: 12px;
+        text-decoration: none; box-shadow: 0 10px 15px -3px rgba(37, 211, 102, 0.4);
+    }
+    .whatsapp-float:hover { transform: translateY(-5px); }
+
+    @media (max-width: 768px) {
+        .nav-links {
+            position: fixed; right: 0; top: 70px; height: calc(100vh - 70px); background: white;
+            flex-direction: column; width: 60%; align-items: center; padding-top: 50px;
+            transform: translateX(100%); transition: 0.4s; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        }
+        .nav-links.active { transform: translateX(0%); }
+        .hamburger { display: block; }
+        .typewriter h2 { font-size: 2rem; white-space: normal; border: none; animation: none; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navbar -->
   <nav class="navbar">
     <div class="container">
       <h1 class="logo">Book Haven</h1>
-      <ul class="nav-links">
+      <ul class="nav-links" id="navLinks">
         <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
         <li><a href="#books">Books</a></li>
         <li><a href="#categories">Categories</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
+      <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-<section class="hero" id="home">
-  <div class="container hero-content">
-    <div class="hero-text">
-      <h2>Welcome to <span>Book Haven</span></h2>
-      <p>Your one-stop shop for books of all genres</p>
-      <a href="#books" class="btn">📚 Browse Collection</a>
-    </div>
-  </div>
-</section>
-
-  <!-- About Section -->
-  <section class="about" id="about">
+  <section class="hero" id="home">
     <div class="container">
-      <h2>About Us</h2>
-      <p>At Book Haven, we believe in the power of stories. Whether you’re into thrillers, fantasy, or self-help — we have something for every reader.</p>
+      <div class="typewriter">
+        <h2>Welcome to <span>Book Haven</span></h2>
+      </div>
+      <p>Your one-stop shop for books of all genres. Discover stories that move you.</p>
+      <a href="#books" class="btn">📚 Browse Collection</a>
     </div>
   </section>
 
-  <!-- Books Section -->
-  <section class="books" id="books">
+  <section class="books hidden-el" id="books">
     <div class="container">
       <h2>Featured Books</h2>
-      <div class="book-grid">
-        <div class="book-card">
-          <img src="https://m.media-amazon.com/images/I/51sMJkf2YaL._SY445_SX342_.jpg" alt="Book 1">
-          <h3>2023</h3>
-          <p>Varchasva </p>
-        </div>
-        <div class="book-card">
-          <img src="https://m.media-amazon.com/images/I/51KlXDoLJAL._SY445_SX342_.jpg" alt="Book 2">
-          <h3>Operation Bazooka:</h3>
+
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search for books...">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+      
+      <div class="filter-container">
+        <button class="filter-btn active" id="btn-all" onclick="filterBooks('all')">All Books</button>
+        <button class="filter-btn" id="btn-true-crime" onclick="filterBooks('true-crime')">True Crime</button>
+        <button class="filter-btn" id="btn-fiction" onclick="filterBooks('fiction')">Fiction</button>
+        <button class="filter-btn" id="btn-self-help" onclick="filterBooks('self-help')">Self-Help</button>
+      </div>
+
+      <div class="book-grid" id="bookGrid">
+        
+        <div class="book-card" data-category="true-crime">
+          <span class="badge">BEST SELLER</span>
+          <img src="https://m.media-amazon.com/images/I/51KlXDoLJAL._SY445_SX342_.jpg" alt="Operation Bazooka">
+          <h3>Operation Bazooka</h3>
           <p>The True Story behind the Hunt for the Most Dreaded UP Gangster.</p>
+          <a href="https://www.amazon.in/dp/9395192313" target="_blank" class="buy-btn">Buy Now</a>
         </div>
-        <div class="book-card">
-          <img src="https://m.media-amazon.com/images/I/71WSqpp+TQL._SY522_.jpg" alt="Book 3">
-          <h3>BITING THE BULLET</h3>
+
+        <div class="book-card" data-category="fiction">
+          <img src="https://m.media-amazon.com/images/I/51sMJkf2YaL._SY445_SX342_.jpg" alt="Varchasva">
+          <h3>Varchasva</h3>
+          <p>A gripping tale of power, politics, and survival against all odds.</p>
+          <a href="https://www.amazon.in/dp/8119989465" target="_blank" class="buy-btn">Buy Now</a>
+        </div>
+
+        <div class="book-card" data-category="fiction">
+          <img src="https://m.media-amazon.com/images/I/71WSqpp+TQL._SY522_.jpg" alt="Biting the Bullet">
+          <h3>Biting the Bullet</h3>
           <p>A story of justice and humanity in the Deep South.</p>
+          <a href="https://www.amazon.in/dp/9353337776" target="_blank" class="buy-btn">Buy Now</a>
         </div>
+
+        <div class="book-card" data-category="self-help">
+          <img src="https://m.media-amazon.com/images/I/51-nXsSRfZL._SY445_SX342_.jpg" alt="Atomic Habits">
+          <h3>Atomic Habits</h3>
+          <p>An easy & proven way to build good habits & break bad ones.</p>
+          <a href="https://www.amazon.in/dp/1847941834" target="_blank" class="buy-btn">Buy Now</a>
+        </div>
+
+        <div class="book-card" data-category="fiction">
+          <img src="https://m.media-amazon.com/images/I/410llGwMZGL._SY445_SX342_.jpg" alt="The Alchemist">
+          <h3>The Alchemist</h3>
+          <p>A magical fable about following your dream and listening to your heart.</p>
+          <a href="https://www.amazon.in/dp/8172234988" target="_blank" class="buy-btn">Buy Now</a>
+        </div>
+
+         <div class="book-card" data-category="self-help">
+            <img src="https://m.media-amazon.com/images/I/51QnuLIY2uL._SY445_SX342_.jpg" alt="Rich Dad Poor Dad">
+            <h3>Rich Dad Poor Dad</h3>
+            <p>What the Rich Teach Their Kids About Money That the Poor Do Not!</p>
+            <a href="https://www.amazon.in/dp/1612681131" target="_blank" class="buy-btn">Buy Now</a>
+          </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Categories Section -->
-  <section class="categories" id="categories">
+  <section class="categories hidden-el" id="categories">
     <div class="container">
       <h2>Browse by Category</h2>
       <div class="category-grid">
-        <div class="category-card">Fiction</div>
-        <div class="category-card">Romance</div>
-        <div class="category-card">Mystery</div>
-        <div class="category-card">Fantasy</div>
-        <div class="category-card">Biography</div>
-        <div class="category-card">Self-help</div>
+        <div class="category-card" onclick="selectCategory('fiction')">Fiction</div>
+        <div class="category-card" onclick="selectCategory('true-crime')">True Crime</div>
+        <div class="category-card" onclick="selectCategory('self-help')">Self-Help</div>
+        <div class="category-card" onclick="selectCategory('fiction')">Romance</div>
+        <div class="category-card" onclick="selectCategory('fiction')">Fantasy</div>
+        <div class="category-card" onclick="selectCategory('all')">View All</div>
       </div>
     </div>
   </section>
 
-  <!-- Contact Section -->
-<section class="contact" id="contact">
-  <div class="container">
-    <h2>Contact Us</h2>
-    <p>Email: <a href="mailto:support@bookhaven.in">support@bookhaven.in</a></p>
-    <p>Instagram: <a href="https://instagram.com/bookhaven.in" target="_blank">@bookhaven.in</a></p>
+  <section class="testimonials hidden-el">
+    <div class="container">
+      <h2>What Readers Say</h2>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Book Haven has the best collection I've found online. The delivery was super fast!"</p>
+          <div class="testimonial-author">
+            <div class="avatar"></div>
+            <span>Rahul Sharma</span>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"I love the recommendations. Biting the Bullet was an amazing read. Highly recommended!"</p>
+          <div class="testimonial-author">
+            <div class="avatar"></div>
+            <span>Priya Singh</span>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Great customer service and very easy to browse. My go-to bookstore now."</p>
+          <div class="testimonial-author">
+            <div class="avatar"></div>
+            <span>Amit Patel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <form action="https://formspree.io/f/xdoqgrrr" method="POST" class="contact-form">
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="email" name="email" placeholder="Your Email" required>
-      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-      <button type="submit">Send Message</button>
-    </form>
-  </div>
-</section>
+  <section class="newsletter hidden-el">
+    <div class="container">
+      <h2>Join Our Readers Club</h2>
+      <p>Get the latest book updates and exclusive offers directly to your inbox.</p>
+      <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
+        <input type="email" placeholder="Enter your email address" required>
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
 
-  <!-- Footer -->
+  <section class="contact hidden-el" id="contact">
+    <div class="container">
+      <h2 style="text-align: center;">Contact Us</h2>
+      <form action="https://formspree.io/f/xdoqgrrr" method="POST" class="contact-form">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <textarea name="message" rows="5" placeholder="Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </section>
+
   <footer>
     <p>© 2025 Book Haven. All rights reserved.</p>
   </footer>
 
+  <a href="https://wa.me/919211645111" class="whatsapp-float" target="_blank">
+    <span class="whatsapp-text">Chat with us</span>
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" width="30"/>
+  </a>
+
+  <script>
+    // 1. Mobile Menu
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
+
+    // 2. Search Logic
+    const searchInput = document.getElementById('searchInput');
+    const bookCards = document.querySelectorAll('.book-card');
+    searchInput.addEventListener('keyup', (e) => {
+      const term = e.target.value.toLowerCase();
+      bookCards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        if (title.includes(term)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+
+    // 3. Filter Function
+    function filterBooks(category) {
+        const books = document.querySelectorAll('.book-card');
+        const buttons = document.querySelectorAll('.filter-btn');
+
+        // Highlight active button
+        buttons.forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.getElementById('btn-' + category);
+        if(activeBtn) activeBtn.classList.add('active');
+
+        books.forEach(book => {
+            const bookCategory = book.getAttribute('data-category');
+            if (category === 'all' || bookCategory === category) {
+                book.style.display = 'block';
+                book.style.animation = 'none';
+                book.offsetHeight; 
+                book.style.animation = 'fadeIn 0.5s ease-in-out';
+            } else {
+                book.style.display = 'none';
+            }
+        });
+    }
+
+    // 4. Connect Categories to Filter
+    function selectCategory(category) {
+        document.getElementById('books').scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => { filterBooks(category); }, 300);
+    }
+
+    // 5. Scroll Animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('show-el');
+      });
+    });
+    document.querySelectorAll('.hidden-el').forEach((el) => observer.observe(el));
+  </script>
+
 </body>
-<!-- WhatsApp Floating Button -->
-<a
-  href="https://wa.me/919211645111"
-  class="whatsapp-float"
-  target="_blank"
-  title="Chat with us on WhatsApp"
->
-  <img
-    src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
-    alt="WhatsApp"
-    width="50"
-  />
-</a>
-
-<style>
-  .whatsapp-float {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    transition: transform 0.3s ease;
-  }
-
-  .whatsapp-float:hover {
-    transform: scale(1.1);
-  }
-</style>
-
 </html>
