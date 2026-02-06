@@ -730,4 +730,8 @@ footer {
 /* Make sure the book card can hold the badge */
 .book-card {
   position: relative; /* This is required for the badge to sit inside */
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 69b855a658ebc8c63c3a754564fc2fce6682337b
