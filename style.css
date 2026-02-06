@@ -3,234 +3,731 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
-  
-  body {
+}
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.5px; /* Adds a little elegance */
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
     font-family: 'Inter', sans-serif;
     background-color: #f4f6f8;
     color: #333;
     line-height: 1.6;
-  }
-  
-  .container {
+}
+
+.container {
     width: 90%;
     max-width: 1100px;
     margin: 0 auto;
     padding: 2rem 0;
-  }
-  
-  /* Navbar */
-  .navbar {
-    background-color: #ffffff;
-    border-bottom: 1px solid #ddd;
-    padding: 1rem 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-  
-  .navbar .container {
+}
+
+/* Navbar */
+.navbar {
+  background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+  backdrop-filter: blur(10px); /* The "Frosted Glass" effect */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
-  .logo {
+}
+
+.logo {
     font-size: 1.8rem;
     font-weight: 600;
     color: #2c3e50;
-  }
-  
-  .nav-links {
+}
+
+.nav-links {
     list-style: none;
     display: flex;
     gap: 1.5rem;
-  }
-  
-  .nav-links a {
+}
+
+.nav-links a {
     text-decoration: none;
     color: #333;
     font-weight: 500;
     transition: color 0.3s;
-  }
-  
-  .nav-links a:hover {
+}
+
+.nav-links a:hover {
     color: #0077cc;
-  }
-  
-  /* Hero */
-  .hero {
+}
+
+/* Hero Section (IMPROVED) */
+.hero {
     background: linear-gradient(rgba(0, 0, 50, 0.7), rgba(0, 0, 50, 0.7)),
                 url('https://images.unsplash.com/photo-1512820790803-83ca734da794') no-repeat center center/cover;
     color: white;
-    padding: 100px 0;
+    padding: 120px 0; /* Increased padding for better look */
     text-align: center;
-  }
-  
-  .hero h2 {
-    font-size: 3rem;
-    margin-bottom: 10px;
+}
+
+.hero h2 {
+    font-size: 3.5rem; /* Larger text */
+    margin-bottom: 15px;
     font-weight: 700;
-  }
-  
-  .hero h2 span {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Adds depth to text */
+}
+
+.hero h2 span {
     color: #ffc107;
-  }
-  
-  .hero p {
-    font-size: 1.25rem;
-    margin-bottom: 25px;
-  }
-  
-  .hero .btn {
-    background-color: #ffc107;
-    color: #000;
-    padding: 12px 30px;
-    border-radius: 30px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.3s;
-  }
-  
-  .hero .btn:hover {
-    background-color: #ff9800;
-  }  
-  
-  .btn {
+}
+
+.hero p {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Buttons */
+.btn {
     padding: 0.75rem 1.5rem;
-    background-color: #1e3a8a;
-    color: #fff;
+    background-color: #ffc107; /* Matches hero accent */
+    color: #000;
     text-decoration: none;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: background 0.3s;
-  }
-  
-  .btn:hover {
-    background-color: #374151;
-  }
-  
-  /* Section Headings */
-  h2 {
+    border-radius: 30px; /* More rounded */
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: #ff9800;
+    transform: translateY(-3px); /* Button lifts up slightly */
+    box-shadow: 0 4px 10px rgba(255, 152, 0, 0.4); /* Glow effect */
+}
+
+/* Section Headings */
+h2 {
     text-align: center;
     margin-bottom: 1rem;
     font-size: 2rem;
-    color: #cb13eb;
-  }
-  
-  /* About */
-  .about p {
+    color: #2c3e50; /* Changed from pink to dark blue for professionalism */
+}
+
+/* About Section */
+.about p {
     text-align: center;
     max-width: 700px;
     margin: 0 auto;
     font-size: 1.1rem;
-  }
-  
-  /* Books Section */
-  .book-grid {
+}
+
+/* Books Section (IMPROVED) */
+.book-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
-  }
-  
-  .book-card {
+}
+
+.book-card {
     background-color: #fff;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     text-align: center;
-  }
-  
-  .book-card img {
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation setup */
+}
+
+/* New Hover Effect for Books */
+.book-card:hover {
+    transform: translateY(-10px); /* Moves up */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Adds deep shadow */
+}
+
+.book-card img {
     width: 100%;
     height: 300px;
     object-fit: cover;
-  }
-  
-  .book-card h3 {
+}
+
+.book-card h3 {
     font-size: 1.2rem;
-    margin: 0.5rem 0;
-  }
-  
-  .book-card p {
+    margin: 1rem 0 0.5rem;
+    color: #1e293b;
+}
+
+.book-card p {
     font-size: 0.95rem;
     padding: 0 1rem 1rem;
-  }
-  
-  /* Categories */
-  .category-grid {
+    color: #64748b;
+}
+
+/* Categories Section (IMPROVED) */
+.category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
     margin-top: 2rem;
-  }
-  
-  .category-card {
-    background-color: #e0f2fe;
+}
+
+.category-card {
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); /* Nice gradient */
+    color: #0c4a6e;
     text-align: center;
     padding: 1rem;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: background 0.3s;
-  }
-  
-  .category-card:hover {
-    background-color: #bae6fd;
-  }
-  
-  /* Contact */
-  .contact p {
+    border-radius: 50px; /* Pill shape */
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.category-card:hover {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); /* Darker blue on hover */
+    color: white;
+    transform: scale(1.05); /* Grows slightly */
+}
+
+/* Contact Section */
+.contact p {
     text-align: center;
     font-size: 1rem;
     margin-bottom: 0.5rem;
-  }
-  
-  .contact a {
+}
+
+.contact a {
     color: #1d4ed8;
     text-decoration: none;
-  }
-  
-  .contact a:hover {
+}
+
+.contact a:hover {
     text-decoration: underline;
-  }
-  
-  /* Footer */
-  footer {
-    background-color: #1e293b;
-    color: #fff;
-    text-align: center;
-    padding: 1rem;
-    font-size: 0.9rem;
-  }
-  .contact-form {
-    margin-top: 20px;
+}
+
+.contact-form {
+    margin: 20px auto; /* Centers the form */
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
     max-width: 500px;
-  }
-  
-  .contact-form input,
-  .contact-form textarea {
-    padding: 10px;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
-  }
-  
-  .contact-form button {
+    font-family: inherit;
+}
+
+.contact-form button {
     padding: 12px;
-    background-color: #6f4e37; /* coffee brown */
+    background-color: #6f4e37; /* Coffee brown */
     color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 600;
     transition: 0.3s ease;
-  }
-  
-  .contact-form button:hover {
+}
+
+.contact-form button:hover {
     background-color: #563927;
-  }
-  
+}
+
+/* Footer */
+footer {
+    background-color: #1e293b;
+    color: #fff;
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+}
+/* WhatsApp Floating Button (Updated) */
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: #25d366; /* Official WhatsApp Green */
+    color: white;
+    padding: 12px 24px;       /* Adds comfortable spacing */
+    border-radius: 50px;      /* Makes it pill-shaped */
+    display: flex;            /* Aligns text and icon side-by-side */
+    align-items: center;
+    gap: 12px;                /* Space between text and icon */
+    text-decoration: none;    /* Removes underline */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Adds a floating shadow */
+    transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+    background-color: #128c7e; /* Darker green when hovering */
+    transform: translateY(-3px); /* Lifts up slightly */
+}
+
+.whatsapp-text {
+    font-weight: 600;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+}
+/* Buy Button Style */
+.buy-btn {
+    display: inline-block;
+    padding: 10px 24px;
+    background-color: #27ae60; /* Nice Green Color */
+    color: white;
+    text-decoration: none;
+    border-radius: 25px; /* Rounded corners */
+    font-weight: 600;
+    margin-bottom: 20px; /* Space at the bottom */
+    transition: background 0.3s ease;
+}
+
+.buy-btn:hover {
+    background-color: #219150; /* Darker green when hovering */
+    transform: scale(1.05); /* Grows slightly */
+}
+/* Buy Button Style */
+.buy-btn {
+    display: inline-block;
+    margin-top: 15px;       /* Adds space above the button */
+    padding: 10px 24px;     /* Makes the button nice and big */
+    background-color: #27ae60; /* A trustworthy green color */
+    color: white;
+    text-decoration: none;  /* Removes the underline */
+    border-radius: 25px;    /* Round corners */
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.buy-btn:hover {/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth; /* Enables smooth scrolling */
+}
+
+/* Custom Scrollbar (Pro Feature) */
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    background: #f4f6f8;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 6px;
+    border: 3px solid #f4f6f8;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+/* Custom Text Selection Color */
+::selection {
+    background: #ffc107;
+    color: #000;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+/* Typography Upgrade */
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif; /* Premium Font */
+    letter-spacing: 0.5px;
+}
+
+/* Navbar with Glassmorphism */
+.navbar {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0; /* Override default container padding */
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #0077cc;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(0, 0, 50, 0.7), rgba(0, 0, 50, 0.7)),
+                url('https://images.unsplash.com/photo-1512820790803-83ca734da794') no-repeat center center/cover;
+    color: white;
+    padding: 140px 0;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.hero h2 span {
+    color: #ffc107;
+}
+
+.hero p {
+    font-size: 1.3rem;
+    margin-bottom: 35px;
+    opacity: 0.95;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.85rem 2rem;
+    background-color: #ffc107;
+    color: #000;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn:hover {
+    background-color: #ff9800;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+}
+
+/* Headings */
+h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 2.2rem;
+    color: #1e293b;
+}
+
+/* About Section */
+.about p {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+}
+
+/* Books Section */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2.5rem;
+    margin-top: 2rem;
+}
+
+.book-card {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding-bottom: 20px;
+}
+
+.book-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.book-card img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+}
+
+.book-card h3 {
+    font-size: 1.3rem;
+    margin: 1.2rem 0 0.5rem;
+    color: #1e293b;
+}
+
+.book-card p {
+    font-size: 0.95rem;
+    padding: 0 1rem 1rem;
+    color: #64748b;
+}
+
+/* Buy Now Buttons */
+.buy-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 24px;
+    background-color: #10b981; /* Fresh Green */
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.buy-btn:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Categories Section */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.category-card {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    color: #0369a1;
+    text-align: center;
+    padding: 1.2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    border: 1px solid #bae6fd;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    color: white;
+    transform: scale(1.05);
+    border-color: #0284c7;
+}
+
+/* Newsletter Section (New!) */
+.newsletter {
+    background-color: #1e293b;
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.newsletter h2 {
+    color: #ffc107;
+    margin-bottom: 0.5rem;
+}
+
+.newsletter p {
+    color: #94a3b8;
+    margin-bottom: 1.5rem;
+}
+
+.newsletter-form {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+    padding: 0 20px;
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+}
+
+.newsletter-form button {
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: none;
+    background-color: #ffc107;
+    color: #000;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.newsletter-form button:hover {
+    background-color: #ffca2c;
+    transform: scale(1.05);
+}
+
+/* Contact Section */
+.contact p {
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.contact a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-form {
+    margin: 30px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+    background-color: #f8fafc;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: 2px solid #3b82f6;
+    border-color: transparent;
+}
+
+.contact-form button {
+    padding: 14px;
+    background-color: #475569;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: 0.3s ease;
+}
+
+.contact-form button:hover {
+    background-color: #334155;
+}
+
+/* Footer */
+footer {
+    background-color: #0f172a;
+    color: #94a3b8;
+    text-align: center;
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1000;
+    background-color: #25d366;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    box-shadow: 0 10px 15px -3px rgba(37, 211, 102, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy effect */
+}
+
+.whatsapp-float:hover {
+    background-color: #128c7e;
+    transform: translateY(-5px) scale(1.02);
+}
+
+.whatsapp-text {
+    font-weight: 600;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+}
+    background-color: #219150; /* Darker green when you touch it */
+    transform: translateY(-2px); /* Lifts up slightly */
+    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3); /* Adds a glow */
+}
+/* Best Seller Badge */
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #e11d48; /* Hot pink/red */
+  color: white;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+/* Make sure the book card can hold the badge */
+.book-card {
+  position: relative; /* This is required for the badge to sit inside */
+}

@@ -3,132 +3,845 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Book Haven</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Book Haven | Premium Bookstore</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2232/2232688.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* --- CSS VARIABLES --- */
+    :root {
+      --bg-color: #f8fafc;
+      --text-color: #333;
+      --card-bg: #fff;
+      --nav-bg: rgba(255, 255, 255, 0.98);
+      --nav-text: #1e293b;
+      --border-color: #e2e8f0;
+      --hero-overlay: rgba(15, 23, 42, 0.8);
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --accent: #ffc107;
+    }
+
+    /* DARK MODE */
+    body.dark-mode {
+      --bg-color: #0f172a;
+      --text-color: #e2e8f0;
+      --card-bg: #1e293b;
+      --nav-bg: rgba(15, 23, 42, 0.98);
+      --nav-text: #f8fafc;
+      --border-color: #334155;
+      --hero-overlay: rgba(0, 0, 0, 0.9);
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    }
+
+    /* --- GLOBAL STYLES --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background-color: var(--bg-color); 
+      color: var(--text-color); 
+      line-height: 1.6; 
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Animations */
+    .hidden-el { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+    .show-el { opacity: 1; transform: translateY(0); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .container { width: 90%; max-width: 1100px; margin: 0 auto; padding: 2rem 0; }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; letter-spacing: 0.5px; }
+
+    /* Navbar */
+    .navbar {
+        background-color: var(--nav-bg); backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-color); height: 70px;
+        display: flex; align-items: center; position: sticky; top: 0; z-index: 1000;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        transition: background-color 0.3s;
+    }
+    .navbar .container { display: flex; justify-content: space-between; align-items: center; padding: 0; height: 100%; }
+    .logo { font-size: 1.8rem; font-weight: 700; color: var(--nav-text); transition: color 0.3s; }
+    .nav-links { list-style: none; display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { text-decoration: none; color: var(--nav-text); font-weight: 500; transition: 0.3s; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* Nav Icons */
+    .nav-icons { display: flex; align-items: center; gap: 20px; margin-left: 20px; }
+    .icon-btn { cursor: pointer; color: var(--nav-text); font-size: 1.2rem; position: relative; transition: 0.3s; }
+    .icon-btn:hover { color: var(--accent); transform: scale(1.1); }
+    .cart-badge {
+      position: absolute; top: -8px; right: -8px; 
+      background: #e11d48; color: white; 
+      font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold;
+    }
+    .hamburger { display: none; cursor: pointer; font-size: 1.5rem; color: var(--nav-text); }
+
+    /* Hero */
+    .hero {
+        background: linear-gradient(var(--hero-overlay), var(--hero-overlay)),
+                    url('https://images.unsplash.com/photo-1512820790803-83ca734da794') no-repeat center center/cover;
+        color: white; padding: 160px 0; text-align: center;
+    }
+    .typewriter h2 {
+        display: inline-block; overflow: hidden; border-right: .15em solid orange;
+        white-space: nowrap; margin: 0 auto 20px; letter-spacing: .10em;
+        animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        font-size: 3.5rem; font-weight: 700;
+    }
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: orange; } }
+    
+    .hero h2 span { color: var(--accent); }
+    .hero p { font-size: 1.4rem; margin: 0 auto 40px; opacity: 0.95; max-width: 600px; }
+    .btn {
+        padding: 1rem 2.5rem; background-color: var(--accent); color: #000; text-decoration: none;
+        border-radius: 50px; font-weight: 700; transition: 0.3s; display: inline-block;
+        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+    }
+    .btn:hover { background-color: #ffca2c; transform: translateY(-3px) scale(1.05); }
+
+    /* Search & Filters */
+    .search-wrapper { text-align: center; margin-bottom: 30px; position: relative; max-width: 500px; margin: 0 auto 30px; }
+    .search-input {
+        width: 100%; padding: 15px 50px 15px 25px; font-size: 1.1rem; 
+        border: 2px solid var(--border-color); border-radius: 50px; outline: none; transition: 0.3s;
+        background: var(--card-bg); color: var(--text-color);
+    }
+    .search-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+    .search-icon { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+    .filter-container { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+    .filter-btn {
+        padding: 10px 25px; border: 2px solid var(--border-color); background: var(--card-bg); 
+        border-radius: 30px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; 
+        transition: 0.3s; color: #64748b;
+    }
+    .filter-btn:hover, .filter-btn.active { background-color: #1e293b; color: white; border-color: #1e293b; transform: translateY(-2px); }
+    body.dark-mode .filter-btn:hover, body.dark-mode .filter-btn.active { background-color: var(--accent); color: black; border-color: var(--accent); }
+
+    /* Books */
+    .book-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-top: 2rem; }
+    .book-card {
+        background-color: var(--card-bg); border-radius: 16px; overflow: hidden;
+        box-shadow: var(--shadow); text-align: center;
+        transition: 0.4s; padding-bottom: 25px; position: relative; border: 1px solid var(--border-color);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    .book-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+    .book-card img { width: 100%; height: 350px; object-fit: cover; }
+    .book-card h3 { font-size: 1.4rem; margin: 1.5rem 0 0.5rem; color: var(--text-color); padding: 0 10px; }
+    .book-card p { font-size: 1rem; padding: 0 1.5rem 1rem; color: #64748b; }
+    
+    .price-tag { font-weight: 700; color: #10b981; font-size: 1.2rem; margin-bottom: 1rem; display: block; }
+    .badge {
+        position: absolute; top: 15px; right: 15px; background-color: #e11d48; color: white;
+        padding: 6px 12px; font-size: 0.85rem; font-weight: 700; border-radius: 6px; z-index: 10;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn-group { display: flex; justify-content: center; gap: 10px; margin-top: 5px; padding: 0 15px; }
+    .buy-btn {
+        padding: 10px 20px; background-color: #10b981; color: white; text-decoration: none; 
+        border-radius: 50px; font-weight: 600; font-size: 0.95rem; transition: 0.3s; flex: 1;
+    }
+    .buy-btn:hover { background-color: #059669; transform: translateY(-2px); box-shadow: 0 10px 15px rgba(16, 185, 129, 0.3); }
+    .add-cart-btn {
+        padding: 10px 15px; background-color: #3b82f6; color: white; border: none;
+        border-radius: 50px; cursor: pointer; transition: 0.3s; font-size: 1rem;
+    }
+    .add-cart-btn:hover { background-color: #2563eb; transform: translateY(-2px); }
+
+    /* Categories, Testimonials, Newsletter, Contact */
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .category-card {
+        background: var(--card-bg); color: var(--text-color); text-align: center; padding: 1.5rem;
+        border-radius: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border-color); transition: 0.3s;
+    }
+    .category-card:hover { background: #3b82f6; color: white; transform: translateY(-5px); border-color: #3b82f6; }
+
+    .testimonials { background-color: var(--card-bg); padding: 4rem 0; margin-top: 4rem; border-top: 1px solid var(--border-color); }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+    .testimonial-card { background: var(--bg-color); padding: 2rem; border-radius: 16px; border: 1px solid var(--border-color); text-align: left; }
+    .testimonial-text { font-style: italic; color: #64748b; margin-bottom: 1rem; font-size: 1.1rem; }
+    .testimonial-author { font-weight: 700; color: var(--text-color); display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 40px; height: 40px; background-color: #cbd5e1; border-radius: 50%; }
+
+    .newsletter { background-color: #1e293b; color: white; padding: 5rem 0; text-align: center; margin-top: 4rem; }
+    .newsletter h2 { color: var(--accent); margin-bottom: 0.5rem; }
+    .newsletter-form { max-width: 500px; margin: 30px auto 0; display: flex; gap: 10px; padding: 0 20px; }
+    .newsletter-form input { flex: 1; padding: 14px 25px; border-radius: 50px; border: none; outline: none; }
+    .newsletter-form button { padding: 14px 30px; border-radius: 50px; border: none; background-color: var(--accent); font-weight: 700; cursor: pointer; transition: 0.3s; }
+    .newsletter-form button:hover { background-color: #ffca2c; transform: scale(1.05); }
+
+    .contact-form {
+        margin: 30px auto 0; display: flex; flex-direction: column; gap: 20px; max-width: 600px;
+        background: var(--card-bg); padding: 3rem; border-radius: 20px; box-shadow: var(--shadow);
+    }
+    .contact-form input, .contact-form textarea {
+        padding: 15px; border: 2px solid var(--border-color); border-radius: 10px; font-size: 16px;
+        background-color: var(--bg-color); color: var(--text-color); font-family: inherit; outline: none;
+    }
+    .contact-form button {
+        width: 100%; padding: 16px; background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        color: #000; font-weight: 700; font-size: 1.1rem; border: none; border-radius: 50px;
+        cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3); transition: 0.3s;
+    }
+    
+    footer { background-color: #0f172a; color: #94a3b8; padding: 4rem 0 2rem; font-size: 0.95rem; text-align: center; }
+    .whatsapp-float {
+        position: fixed; bottom: 30px; right: 30px; z-index: 1000; background-color: #25d366; color: white;
+        padding: 12px 24px; border-radius: 50px; display: flex; align-items: center; gap: 12px;
+        text-decoration: none; box-shadow: 0 10px 15px -3px rgba(37, 211, 102, 0.4); transition: 0.3s;
+    }
+    .whatsapp-float:hover { transform: translateY(-5px); }
+    
+    /* MODAL (Updated for Size) */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+    .modal-content {
+      background: var(--card-bg); color: var(--text-color); 
+      width: 95%; max-width: 700px; /* MADE BIGGER */
+      padding: 2rem; border-radius: 16px; position: relative; 
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      animation: fadeIn 0.3s ease-out;
+    }
+    .close-modal { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #64748b; }
+    
+    .cart-items { 
+        max-height: 400px; /* Taller list */
+        overflow-y: auto; 
+        margin: 1.5rem 0; 
+        border-top: 1px solid var(--border-color); 
+        border-bottom: 1px solid var(--border-color); 
+    }
+    
+    /* CART ITEM STYLES (NEW IMAGE SUPPORT) */
+    .cart-item { 
+      display: flex; align-items: center; gap: 15px;
+      padding: 15px 0; border-bottom: 1px solid var(--border-color); 
+    }
+    .cart-item-img {
+      width: 60px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color);
+    }
+    .item-info { flex: 1; text-align: left; }
+    .item-title { font-weight: 600; font-size: 1.1rem; display: block; margin-bottom: 4px; }
+    .item-price { font-size: 0.95rem; color: #64748b; }
+    
+    .cart-controls-group { display: flex; align-items: center; gap: 15px; }
+    
+    .qty-controls { display: flex; align-items: center; gap: 5px; }
+    .qty-btn { 
+      width: 32px; height: 32px; background-color: var(--border-color); color: var(--text-color);
+      border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center; transition: 0.2s;
+    }
+    .qty-btn:hover { background-color: var(--accent); color: black; }
+    .qty-num { font-weight: 700; min-width: 25px; text-align: center; font-size: 1.1rem; }
+
+    .trash-btn {
+      color: #ef4444; background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 5px; transition: 0.2s;
+    }
+    .trash-btn:hover { color: #b91c1c; transform: scale(1.1); }
+
+    .cart-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+    .cart-total { font-size: 1.4rem; font-weight: 700; }
+    .clear-cart { color: #ef4444; font-size: 0.95rem; text-decoration: underline; cursor: pointer; }
+
+    .checkout-btn {
+      width: 100%; padding: 16px; background-color: #25d366; color: white; border: none; border-radius: 12px;
+      font-weight: 700; font-size: 1.2rem; cursor: pointer; margin-top: 20px;
+    }
+    .checkout-btn:hover { background-color: #128c7e; }
+
+    /* Toast */
+    .toast {
+      visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center;
+      border-radius: 50px; padding: 16px; position: fixed; z-index: 3000; left: 50%; bottom: 30px;
+      transform: translateX(-50%); font-size: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      opacity: 0; transition: opacity 0.5s, bottom 0.5s;
+    }
+    .toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+    
+    /* Back to Top */
+    #topBtn {
+      display: none; position: fixed; bottom: 90px; right: 30px; z-index: 99; border: none; outline: none;
+      background-color: var(--nav-text); color: var(--bg-color); cursor: pointer; padding: 15px; border-radius: 50%;
+      font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s;
+    }
+    #topBtn:hover { transform: translateY(-3px); opacity: 0.8; }
+
+    @media (max-width: 768px) {
+        .nav-links {
+            position: fixed; right: 0; top: 70px; height: calc(100vh - 70px); background: var(--card-bg);
+            flex-direction: column; width: 60%; align-items: center; padding-top: 50px;
+            transform: translateX(100%); transition: 0.4s; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        }
+        .nav-links.active { transform: translateX(0%); }
+        .hamburger { display: block; }
+        .typewriter h2 { font-size: 2rem; white-space: normal; border: none; animation: none; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navbar -->
+  <div id="toast" class="toast">Action Successful!</div>
+
+  <button onclick="scrollToTop()" id="topBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
+
+  <div id="cartModal" class="modal-overlay">
+    <div class="modal-content">
+      <span class="close-modal" onclick="toggleCartModal()">&times;</span>
+      <h2 style="border-bottom: 2px solid var(--accent); display: inline-block; padding-bottom: 5px;">Your Cart</h2>
+      <div class="cart-items" id="cartItemsContainer">
+        </div>
+      
+      <div class="cart-footer">
+        <span class="clear-cart" onclick="clearCart()">Clear Cart</span>
+        <div class="cart-total">Total: <span id="cartTotal">₹0</span></div>
+      </div>
+
+      <button class="checkout-btn" onclick="checkoutWhatsApp()"><i class="fab fa-whatsapp"></i> Checkout on WhatsApp</button>
+    </div>
+  </div>
+  <div id="wishlistModal" class="modal-overlay">
+  <div class="modal-content">
+    <span class="close-modal" onclick="toggleWishlistModal()">&times;</span>
+    <h2 style="border-bottom:2px solid var(--accent);padding-bottom:5px;">
+      ❤️ Your Wishlist
+    </h2>
+    <div class="cart-items" id="wishlistItems"></div>
+  </div>
+</div>
+
   <nav class="navbar">
     <div class="container">
       <h1 class="logo">Book Haven</h1>
-      <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#books">Books</a></li>
-        <li><a href="#categories">Categories</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#books">Books</a></li>
+          <li><a href="#categories">Categories</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="nav-icons">
+          <div class="icon-btn" onclick="toggleWishlistModal()">
+  <i class="fas fa-heart"></i>
+  <span class="cart-badge" id="wishlistBadge">0</span>
+</div>
+
+          <div class="icon-btn" onclick="toggleCartModal()">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-badge" id="cartBadge">0</span>
+          </div>
+          <div class="icon-btn" onclick="toggleTheme()">
+            <i class="fas fa-moon" id="themeIcon"></i>
+          </div>
+        </div>
+        <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+      </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-<section class="hero" id="home">
-  <div class="container hero-content">
-    <div class="hero-text">
-      <h2>Welcome to <span>Book Haven</span></h2>
-      <p>Your one-stop shop for books of all genres</p>
-      <a href="#books" class="btn">📚 Browse Collection</a>
-    </div>
-  </div>
-</section>
-
-  <!-- About Section -->
-  <section class="about" id="about">
+  <section class="hero" id="home">
     <div class="container">
-      <h2>About Us</h2>
-      <p>At Book Haven, we believe in the power of stories. Whether you’re into thrillers, fantasy, or self-help — we have something for every reader.</p>
+      <div class="typewriter">
+        <h2>Welcome to <span>Book Haven</span></h2>
+      </div>
+      <p>Your one-stop shop for books of all genres. Discover stories that move you.</p>
+      <a href="#books" class="btn">📚 Browse Collection</a>
     </div>
   </section>
 
-  <!-- Books Section -->
-  <section class="books" id="books">
+  <section class="books hidden-el" id="books">
     <div class="container">
       <h2>Featured Books</h2>
-      <div class="book-grid">
-        <div class="book-card">
-          <img src="https://m.media-amazon.com/images/I/51sMJkf2YaL._SY445_SX342_.jpg" alt="Book 1">
-          <h3>2023</h3>
-          <p>Varchasva </p>
-        </div>
-        <div class="book-card">
-          <img src="https://m.media-amazon.com/images/I/51KlXDoLJAL._SY445_SX342_.jpg" alt="Book 2">
-          <h3>Operation Bazooka:</h3>
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search for books...">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+      <div class="filter-container">
+        <button class="filter-btn active" id="btn-all" onclick="filterBooks('all')">All Books</button>
+        <button class="filter-btn" id="btn-true-crime" onclick="filterBooks('true-crime')">True Crime</button>
+        <button class="filter-btn" id="btn-fiction" onclick="filterBooks('fiction')">Fiction</button>
+        <button class="filter-btn" id="btn-self-help" onclick="filterBooks('self-help')">Self-Help</button>
+      </div>
+
+      <div class="book-grid" id="bookGrid">
+        
+        <div class="book-card" data-category="true-crime">
+          <span class="badge">BEST SELLER</span>
+          <img src="https://m.media-amazon.com/images/I/51KlXDoLJAL._SY445_SX342_.jpg" alt="Operation Bazooka" loading="lazy">
+          <h3>Operation Bazooka</h3>
           <p>The True Story behind the Hunt for the Most Dreaded UP Gangster.</p>
+          <span class="price-tag">₹399</span>
+          <div class="btn-group">
+            <button class="add-cart-btn" onclick="toggleWishlist('Operation Bazooka',399,'https://m.media-amazon.com/images/I/51KlXDoLJAL._SY445_SX342_.jpg')">
+  <i class="fas fa-heart"></i>
+</button>
+            <a href="https://www.amazon.in/dp/9395192313" target="_blank" class="buy-btn">Buy Now</a>
+            <button class="add-cart-btn" onclick="addToCart('Operation Bazooka', 399, 'https://m.media-amazon.com/images/I/51KlXDoLJAL._SY445_SX342_.jpg')"><i class="fas fa-cart-plus"></i></button>
+          </div>
         </div>
-        <div class="book-card">
-          <img src="https://m.media-amazon.com/images/I/71WSqpp+TQL._SY522_.jpg" alt="Book 3">
-          <h3>BITING THE BULLET</h3>
+
+        <div class="book-card" data-category="fiction">
+          <img src="https://m.media-amazon.com/images/I/51sMJkf2YaL._SY445_SX342_.jpg" alt="Varchasva" loading="lazy">
+          <h3>Varchasva</h3>
+          <p>A gripping tale of power, politics, and survival against all odds.</p>
+          <span class="price-tag">₹299</span>
+          <div class="btn-group">
+            <button class="add-cart-btn" onclick="toggleWishlist('Varchasva',299,'https://m.media-amazon.com/images/I/51sMJkf2YaL._SY445_SX342_.jpg')">
+  <i class="fas fa-heart"></i>
+</button>
+            <a href="https://www.amazon.in/dp/8119989465" target="_blank" class="buy-btn">Buy Now</a>
+            <button class="add-cart-btn" onclick="addToCart('Varchasva', 299, 'https://m.media-amazon.com/images/I/51sMJkf2YaL._SY445_SX342_.jpg')"><i class="fas fa-cart-plus"></i></button>
+          </div>
+        </div>
+
+        <div class="book-card" data-category="fiction">
+          <img src="https://m.media-amazon.com/images/I/71WSqpp+TQL._SY522_.jpg" alt="Biting the Bullet" loading="lazy">
+          <h3>Biting the Bullet</h3>
           <p>A story of justice and humanity in the Deep South.</p>
+          <span class="price-tag">₹349</span>
+          <div class="btn-group">
+            <button class="add-cart-btn" onclick="toggleWishlist('Biting the Bullet',349,'https://m.media-amazon.com/images/I/71WSqpp+TQL._SY522_.jpg')">
+  <i class="fas fa-heart"></i>
+  </button>
+            <a href="https://www.amazon.in/dp/9353337776" target="_blank" class="buy-btn">Buy Now</a>
+            <button class="add-cart-btn" onclick="addToCart('Biting the Bullet', 349, 'https://m.media-amazon.com/images/I/71WSqpp+TQL._SY522_.jpg')"><i class="fas fa-cart-plus"></i></button>
+          </div>
         </div>
+
+        <div class="book-card" data-category="self-help">
+          <span class="badge">BEST SELLER</span>
+          <img src="https://m.media-amazon.com/images/I/51-nXsSRfZL._SY445_SX342_.jpg" alt="Atomic Habits" loading="lazy">
+          <h3>Atomic Habits</h3>
+          <p>An easy & proven way to build good habits & break bad ones.</p>
+          <span class="price-tag">₹450</span>
+          <div class="btn-group">
+            <button class="add-cart-btn" onclick="toggleWishlist('Atomic Habits',450,'https://m.media-amazon.com/images/I/51-nXsSRfZL._SY445_SX342_.jpg')">
+  <i class="fas fa-heart"></i>
+</button>
+            <a href="https://www.amazon.in/dp/1847941834" target="_blank" class="buy-btn">Buy Now</a>
+            <button class="add-cart-btn" onclick="addToCart('Atomic Habits', 450, 'https://m.media-amazon.com/images/I/51-nXsSRfZL._SY445_SX342_.jpg')"><i class="fas fa-cart-plus"></i></button>
+          </div>
+        </div>
+
+        <div class="book-card" data-category="fiction">
+          <img src="https://m.media-amazon.com/images/I/410llGwMZGL._SY445_SX342_.jpg" alt="The Alchemist" loading="lazy">
+          <h3>The Alchemist</h3>
+          <p>A magical fable about following your dream and listening to your heart.</p>
+          <span class="price-tag">₹250</span>
+          <div class="btn-group">
+            <button class="add-cart-btn" onclick="toggleWishlist('The Alchemist',250,'https://m.media-amazon.com/images/I/410llGwMZGL._SY445_SX342_.jpg')">
+  <i class="fas fa-heart"></i>
+  </button>
+            <a href="https://www.amazon.in/dp/8172234988" target="_blank" class="buy-btn">Buy Now</a>
+            <button class="add-cart-btn" onclick="addToCart('The Alchemist', 250, 'https://m.media-amazon.com/images/I/410llGwMZGL._SY445_SX342_.jpg')"><i class="fas fa-cart-plus"></i></button>
+          </div>
+        </div>
+
+         <div class="book-card" data-category="self-help">
+            <img src="https://m.media-amazon.com/images/I/51QnuLIY2uL._SY445_SX342_.jpg" alt="Rich Dad Poor Dad" loading="lazy">
+            <h3>Rich Dad Poor Dad</h3>
+            <p>What the Rich Teach Their Kids About Money That the Poor Do Not!</p>
+            <span class="price-tag">₹399</span>
+            <div class="btn-group">
+              <button class="add-cart-btn" onclick="toggleWishlist('Rich Dad Poor Dad',399,'https://m.media-amazon.com/images/I/51QnuLIY2uL._SY445_SX342_.jpg')">
+  <i class="fas fa-heart"></i>
+  </button>
+              <a href="https://www.amazon.in/dp/1612681131" target="_blank" class="buy-btn">Buy Now</a>
+              <button class="add-cart-btn" onclick="addToCart('Rich Dad Poor Dad', 399, 'https://m.media-amazon.com/images/I/51QnuLIY2uL._SY445_SX342_.jpg')"><i class="fas fa-cart-plus"></i></button>
+            </div>
+          </div>
+
+      </div>
+      <div id="noResults" style="display: none; text-align: center; margin-top: 3rem; color: #64748b;">
+        <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+        <h3>No books found</h3>
+        <p>Try searching for a different title or category.</p>
       </div>
     </div>
   </section>
 
-  <!-- Categories Section -->
-  <section class="categories" id="categories">
+  <section class="categories hidden-el" id="categories">
     <div class="container">
       <h2>Browse by Category</h2>
       <div class="category-grid">
-        <div class="category-card">Fiction</div>
-        <div class="category-card">Romance</div>
-        <div class="category-card">Mystery</div>
-        <div class="category-card">Fantasy</div>
-        <div class="category-card">Biography</div>
-        <div class="category-card">Self-help</div>
+        <div class="category-card" onclick="selectCategory('fiction')">Fiction</div>
+        <div class="category-card" onclick="selectCategory('true-crime')">True Crime</div>
+        <div class="category-card" onclick="selectCategory('self-help')">Self-Help</div>
+        <div class="category-card" onclick="selectCategory('fiction')">Romance</div>
+        <div class="category-card" onclick="selectCategory('fiction')">Fantasy</div>
+        <div class="category-card" onclick="selectCategory('all')">View All</div>
       </div>
     </div>
   </section>
 
-  <!-- Contact Section -->
-<section class="contact" id="contact">
-  <div class="container">
-    <h2>Contact Us</h2>
-    <p>Email: <a href="mailto:support@bookhaven.in">support@bookhaven.in</a></p>
-    <p>Instagram: <a href="https://instagram.com/bookhaven.in" target="_blank">@bookhaven.in</a></p>
+  <section class="testimonials hidden-el">
+    <div class="container">
+      <h2>What Readers Say</h2>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Book Haven has the best collection I've found online. The delivery was super fast!"</p>
+          <div class="testimonial-author">
+            <div class="avatar"></div>
+            <span>Rahul Sharma</span>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"I love the recommendations. Biting the Bullet was an amazing read. Highly recommended!"</p>
+          <div class="testimonial-author">
+            <div class="avatar"></div>
+            <span>Priya Singh</span>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Great customer service and very easy to browse. My go-to bookstore now."</p>
+          <div class="testimonial-author">
+            <div class="avatar"></div>
+            <span>Amit Patel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <form action="https://formspree.io/f/xdoqgrrr" method="POST" class="contact-form">
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="email" name="email" placeholder="Your Email" required>
-      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-      <button type="submit">Send Message</button>
-    </form>
-  </div>
-</section>
+  <section class="newsletter hidden-el">
+    <div class="container">
+      <h2>Join Our Readers Club</h2>
+      <p>Get the latest book updates and exclusive offers directly to your inbox.</p>
+      <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Subscribed successfully!');">
+        <input type="email" placeholder="Enter your email address" required>
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
 
-  <!-- Footer -->
+  <section class="contact hidden-el" id="contact">
+    <div class="container">
+      <h2 style="text-align: center;">Contact Us</h2>
+      <form action="https://formspree.io/f/xdoqgrrr" method="POST" class="contact-form">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <textarea name="message" rows="5" placeholder="Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </section>
+
   <footer>
-    <p>© 2025 Book Haven. All rights reserved.</p>
+    <p>© 2026 Book Haven. All rights reserved.</p>
   </footer>
 
+  <a href="https://wa.me/919211645111?text=Hi,%20I%20visited%20Book%20Haven%20and%20have%20a%20query." class="whatsapp-float" target="_blank">
+    <span class="whatsapp-text">Chat with us</span>
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" width="30"/>
+  </a>
+
+  <script>
+    /* --- LOGIC START --- */
+    
+    // 1. Mobile Menu
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
+
+    // 2. Search Logic
+    const searchInput = document.getElementById('searchInput');
+    const bookCards = document.querySelectorAll('.book-card');
+    const noResultsMsg = document.getElementById('noResults');
+
+    searchInput.addEventListener('keyup', (e) => {
+      const term = e.target.value.toLowerCase();
+      let visibleCount = 0;
+      bookCards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        if (title.includes(term)) {
+          card.style.display = 'block';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+    });
+
+    // 3. Filter Function
+    function filterBooks(category) {
+        const books = document.querySelectorAll('.book-card');
+        const buttons = document.querySelectorAll('.filter-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.getElementById('btn-' + category);
+        if(activeBtn) activeBtn.classList.add('active');
+
+        let visibleCount = 0;
+        books.forEach(book => {
+            const bookCategory = book.getAttribute('data-category');
+            if (category === 'all' || bookCategory === category) {
+                book.style.display = 'block';
+                book.style.animation = 'none';
+                book.offsetHeight; 
+                book.style.animation = 'fadeIn 0.5s ease-in-out';
+                visibleCount++;
+            } else {
+                book.style.display = 'none';
+            }
+        });
+        noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    // 4. Scroll & Categories
+    function selectCategory(category) {
+        document.getElementById('books').scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => { filterBooks(category); }, 300);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('show-el');
+      });
+    });
+    document.querySelectorAll('.hidden-el').forEach((el) => observer.observe(el));
+
+    // 5. Toast
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message || "Success!";
+      toast.className = "toast show";
+      setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+
+    // 6. Back to Top
+    const topBtn = document.getElementById("topBtn");
+    window.onscroll = function() {
+      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        topBtn.style.display = "block";
+      } else {
+        topBtn.style.display = "none";
+      }
+    };
+    function scrollToTop() {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // 7. DARK MODE
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const themeIcon = document.getElementById('themeIcon');
+      if (document.body.classList.contains('dark-mode')) {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+      } else {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      }
+    }
+
+    /* --- 8. PRO CART LOGIC WITH IMAGES --- */
+    let cart = []; 
+
+    // Load Cart from Browser Memory on Start
+    function loadCart() {
+      const storedCart = localStorage.getItem('shoppingCart');
+      if (storedCart) {
+        cart = JSON.parse(storedCart);
+        updateCartUI();
+      }
+    }
+    window.onload = loadCart; // Run this when page opens
+
+    // Save Cart to Browser Memory
+    function saveCart() {
+      localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    }
+
+    // UPDATED: Now accepts image URL
+    function addToCart(title, price, image) {
+      const existingItem = cart.find(item => item.title === title);
+      
+      if (existingItem) {
+        existingItem.qty += 1;
+        showToast('Increased quantity of "' + title + '"');
+      } else {
+        cart.push({ title, price, image, qty: 1 });
+        showToast('Added "' + title + '" to Cart!');
+      }
+      saveCart(); // SAVE
+      updateCartUI();
+    }
+
+    function changeQty(title, change) {
+      const item = cart.find(i => i.title === title);
+      if (!item) return;
+
+      item.qty += change;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.title !== title);
+      }
+      saveCart(); // SAVE
+      updateCartUI();
+    }
+
+    function removeItem(title) {
+      cart = cart.filter(i => i.title !== title);
+      saveCart(); // SAVE
+      updateCartUI();
+    }
+
+    function clearCart() {
+      cart = [];
+      saveCart(); // SAVE
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cartBadge').innerText = totalCount;
+      
+      const cartContainer = document.getElementById('cartItemsContainer');
+      const totalEl = document.getElementById('cartTotal');
+      
+      if (cart.length === 0) {
+        cartContainer.innerHTML = '<p style="text-align:center; color:#64748b; padding: 40px 0; font-size: 1.1rem;">Your cart is empty.</p>';
+        totalEl.innerText = "₹0";
+        return;
+      }
+
+      let html = '';
+      let total = 0;
+      
+      cart.forEach(item => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        html += `
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.title}" class="cart-item-img">
+            
+            <div class="item-info">
+              <span class="item-title">${item.title}</span>
+              <span class="item-price">₹${item.price} x ${item.qty} = <strong>₹${itemTotal}</strong></span>
+            </div>
+            
+            <div class="cart-controls-group">
+              <div class="qty-controls">
+                <button class="qty-btn" onclick="changeQty('${item.title}', -1)">-</button>
+                <span class="qty-num">${item.qty}</span>
+                <button class="qty-btn" onclick="changeQty('${item.title}', 1)">+</button>
+              </div>
+              <button class="trash-btn" onclick="removeItem('${item.title}')"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+      });
+
+      cartContainer.innerHTML = html;
+      totalEl.innerText = "₹" + total;
+    }
+
+    function toggleCartModal() {
+      const modal = document.getElementById('cartModal');
+      modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function checkoutWhatsApp() {
+      if (cart.length === 0) {
+        showToast("Your cart is empty!");
+        return;
+      }
+
+      let message = "Hi, I would like to place an order for:%0A";
+      let total = 0;
+      cart.forEach(item => {
+        const itemTotal = item.price * item.qty;
+        message += `- ${item.title} (x${item.qty}) - ₹${itemTotal}%0A`;
+        total += itemTotal;
+      });
+      message += `%0A*Total: ₹${total}*`;
+
+      const phoneNumber = "919211645111"; // Your WhatsApp Number
+      const url = `https://wa.me/${phoneNumber}?text=${message}`;
+      
+      window.open(url, '_blank');
+      toggleCartModal();
+    }
+  </script>
+<!-- ================= WISHLIST FEATURE ================= -->
+
+<script>
+  let wishlist = [];
+
+  // Load wishlist on page load
+  function loadWishlist() {
+    const saved = localStorage.getItem("wishlist");
+    if (saved) wishlist = JSON.parse(saved);
+    updateWishlistUI();
+  }
+  loadWishlist();
+
+  function saveWishlist() {
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  }
+
+  function toggleWishlist(title, price, image) {
+    const exists = wishlist.find(item => item.title === title);
+
+    if (exists) {
+      wishlist = wishlist.filter(item => item.title !== title);
+      showToast("Removed from Wishlist");
+    } else {
+      wishlist.push({ title, price, image });
+      showToast("Added to Wishlist ❤️");
+    }
+
+    saveWishlist();
+    updateWishlistUI();
+  }
+
+  function updateWishlistUI() {
+    const badge = document.getElementById("wishlistBadge");
+    const list = document.getElementById("wishlistItems");
+
+    if (!badge || !list) return;
+
+    badge.innerText = wishlist.length;
+
+    if (wishlist.length === 0) {
+      list.innerHTML = `<p style="text-align:center;color:#64748b;padding:30px;">
+        Wishlist is empty
+      </p>`;
+      return;
+    }
+
+    list.innerHTML = wishlist.map(item => `
+      <div class="cart-item">
+        <img src="${item.image}" class="cart-item-img">
+        <div class="item-info">
+          <span class="item-title">${item.title}</span>
+          <span class="item-price">₹${item.price}</span>
+        </div>
+        <button class="trash-btn" onclick="removeWishlist('${item.title}')">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    `).join("");
+  }
+
+  function removeWishlist(title) {
+    wishlist = wishlist.filter(item => item.title !== title);
+    saveWishlist();
+    updateWishlistUI();
+  }
+
+  function toggleWishlistModal() {
+    const modal = document.getElementById("wishlistModal");
+    modal.style.display = modal.style.display === "flex" ? "none" : "flex";
+  }
+</script>
+
 </body>
-<!-- WhatsApp Floating Button -->
-<a
-  href="https://wa.me/919211645111"
-  class="whatsapp-float"
-  target="_blank"
-  title="Chat with us on WhatsApp"
->
-  <img
-    src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
-    alt="WhatsApp"
-    width="50"
-  />
-</a>
-
-<style>
-  .whatsapp-float {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    transition: transform 0.3s ease;
-  }
-
-  .whatsapp-float:hover {
-    transform: scale(1.1);
-  }
-</style>
-
 </html>
